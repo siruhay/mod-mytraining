@@ -1,13 +1,13 @@
 <template>
-    <page-base
-        module-name="mytraining"
-        module-key="mytraining"
-        module-type="administrator"
-    ></page-base>
+	<page-base
+		module-name="mytraining"
+		module-key="mytraining"
+		module-type="personal"
+	></page-base>
 </template>
 
 <script>
 export default {
-    name: "mytraining-base",
+	name: "mytraining-base",
 };
 </script>

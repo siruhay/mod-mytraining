@@ -1,14 +1,11 @@
 <template>
-    <page-home
-        page-name="mytraining-dashboard"
-        page-title="Untitled"
-    >
-        <template v-slot:default></template>
-    </page-home>
+	<page-home page-name="mytraining-dashboard">
+		<template v-slot:default></template>
+	</page-home>
 </template>
 
 <script>
 export default {
-    name: "mytraining-dashboard",
+	name: "mytraining-dashboard",
 };
 </script>
