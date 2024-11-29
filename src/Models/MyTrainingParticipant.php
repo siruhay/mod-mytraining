@@ -33,7 +33,7 @@ class MyTrainingParticipant extends Model
      *
      * @var string
      */
-    protected $table = 'mytraining_participants';
+    protected $table = 'training_participants';
 
     /**
      * The roles variable
