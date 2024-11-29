@@ -9,7 +9,9 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Module\Training\Models\TrainingVillage;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Module\Training\Models\TrainingSubdistrict;
 use Module\MyTraining\Http\Resources\EventResource;
 
 class MyTrainingEvent extends Model
@@ -56,6 +58,42 @@ class MyTrainingEvent extends Model
      * @var string
      */
     protected $defaultOrder = 'name';
+
+    /**
+     * mapCombos function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapCombos(Request $request, $model = null): array
+    {
+        return [
+            'subdistricts'  => TrainingSubdistrict::where('regency_id', 3)->forCombo(),
+            'villages'      => optional($model)->subdistrict_id ?
+                TrainingVillage::where('district_id', $model->subdistrict_id)->forCombo() :
+                []
+        ];
+    }
+
+    /**
+     * mapResourceShow function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResourceShow(Request $request, $model): array
+    {
+        return [
+            'id'                => $model->id,
+            'name'              => $model->name,
+            'slug'              => $model->slug,
+            'startdate'         => $model->startdate,
+            'finishdate'        => $model->finishdate,
+            'village_id'        => $model->village_id,
+            'subdistrict_id'    => $model->subdistrict_id,
+            'regency_id'        => $model->regency_id,
+        ];
+    }
 
     /**
      * The model store method

@@ -38,24 +38,6 @@ export default {
 				},
 
 				{
-					path: "create",
-					name: "mytraining-event-create",
-					component: () =>
-						import(
-							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/event/crud/create.vue"
-						),
-				},
-
-				{
-					path: ":event/edit",
-					name: "mytraining-event-edit",
-					component: () =>
-						import(
-							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/event/crud/edit.vue"
-						),
-				},
-
-				{
 					path: ":event/show",
 					name: "mytraining-event-show",
 					component: () =>

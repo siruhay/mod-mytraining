@@ -1,5 +1,9 @@
 <template>
-	<form-show with-helpdesk>
+	<form-show
+		hide-delete
+		hide-edit
+		with-helpdesk
+	>
 		<template
 			v-slot:default="{
 				combos: { subdistricts, villages },
@@ -42,6 +46,7 @@
 						<v-col cols="12">
 							<v-combobox
 								:items="subdistricts"
+								:return-object="false"
 								label="Kecamatan"
 								v-model="record.subdistrict_id"
 								hide-details
@@ -52,6 +57,7 @@
 						<v-col cols="12">
 							<v-combobox
 								:items="villages"
+								:return-object="false"
 								label="Kelurahan/Desa"
 								v-model="record.village_id"
 								hide-details
