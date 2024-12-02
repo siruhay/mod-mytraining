@@ -111,6 +111,16 @@ class MyTrainingEvent extends Model
     }
 
     /**
+     * participants function
+     *
+     * @return HasMany
+     */
+    public function participants(): HasMany
+    {
+        return $this->hasMany(MyTrainingParticipant::class, 'event_id');
+    }
+
+    /**
      * questions function
      *
      * @return HasMany

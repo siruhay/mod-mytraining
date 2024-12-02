@@ -123,8 +123,10 @@
 						:color="theme"
 						variant="flat"
 						block
-						@click="$router.push({ name: 'mytraining-presence' })"
-						>absensi</v-btn
+						@click="
+							$router.push({ name: 'mytraining-participant' })
+						"
+						>peserta</v-btn
 					>
 				</v-col>
 
