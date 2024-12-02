@@ -250,24 +250,6 @@ export default {
 				},
 
 				{
-					path: "create",
-					name: "mytraining-rundown-create",
-					component: () =>
-						import(
-							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/event-rundown/crud/create.vue"
-						),
-				},
-
-				{
-					path: ":rundown/edit",
-					name: "mytraining-rundown-edit",
-					component: () =>
-						import(
-							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/event-rundown/crud/edit.vue"
-						),
-				},
-
-				{
 					path: ":rundown/show",
 					name: "mytraining-rundown-show",
 					component: () =>

@@ -1,5 +1,7 @@
 <template>
 	<form-show
+		hide-edit
+		hide-delete
 		with-helpdesk
 	>
 		<template v-slot:default="{ record }">
