@@ -9,6 +9,7 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Module\Training\Models\TrainingVillage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Module\Training\Models\TrainingSubdistrict;
@@ -60,6 +61,20 @@ class MyTrainingEvent extends Model
     protected $defaultOrder = 'name';
 
     /**
+     * mapStatuses function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapStatuses(Request $request, $model = null): array
+    {
+        return [
+            'participant' => $request->user()->hasLicenseAs('mytraining-participant'),
+            'speaker' => $request->user()->hasLicenseAs('mytraining-speaker')
+        ];
+    }
+
+    /**
      * mapCombos function
      *
      * @param Request $request
@@ -93,6 +108,16 @@ class MyTrainingEvent extends Model
             'subdistrict_id'    => $model->subdistrict_id,
             'regency_id'        => $model->regency_id,
         ];
+    }
+
+    /**
+     * questions function
+     *
+     * @return HasMany
+     */
+    public function questions(): HasMany
+    {
+        return $this->hasMany(MyTrainingQuestion::class, 'event_id');
     }
 
     /**

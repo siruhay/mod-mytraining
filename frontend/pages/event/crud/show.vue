@@ -69,11 +69,14 @@
 			</v-card-text>
 		</template>
 
-		<template v-slot:info="{ theme }">
+		<template v-slot:info="{ statuses: { participant, speaker }, theme }">
 			<div class="text-overline mt-4">Aksi</div>
 			<v-divider class="mb-3"></v-divider>
 
-			<v-row dense>
+			<v-row
+				dense
+				v-if="participant"
+			>
 				<v-col cols="6">
 					<v-btn
 						:color="theme"
@@ -106,6 +109,51 @@
 						:color="theme"
 						variant="flat"
 						block
+						>postest</v-btn
+					>
+				</v-col>
+			</v-row>
+
+			<v-row
+				dense
+				v-if="speaker"
+			>
+				<v-col cols="6">
+					<v-btn
+						:color="theme"
+						variant="flat"
+						block
+						@click="$router.push({ name: 'mytraining-presence' })"
+						>absensi</v-btn
+					>
+				</v-col>
+
+				<v-col cols="6">
+					<v-btn
+						:color="theme"
+						variant="flat"
+						block
+						@click="$router.push({ name: 'mytraining-rundown' })"
+						>rundown</v-btn
+					>
+				</v-col>
+
+				<v-col cols="6">
+					<v-btn
+						:color="theme"
+						variant="flat"
+						block
+						@click="$router.push({ name: 'mytraining-pretest' })"
+						>pretest</v-btn
+					>
+				</v-col>
+
+				<v-col cols="6">
+					<v-btn
+						:color="theme"
+						variant="flat"
+						block
+						@click="$router.push({ name: 'mytraining-postest' })"
 						>postest</v-btn
 					>
 				</v-col>

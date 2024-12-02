@@ -48,6 +48,52 @@ export default {
 			],
 		},
 
+		// event/:event/participant
+		{
+			path: "event/:event/participant",
+			component: () =>
+				import(
+					/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/event-participant/index.vue"
+				),
+			children: [
+				{
+					path: "",
+					name: "mytraining-participant",
+					component: () =>
+						import(
+							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/event-participant/crud/data.vue"
+						),
+				},
+
+				{
+					path: "create",
+					name: "mytraining-participant-create",
+					component: () =>
+						import(
+							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/event-participant/crud/create.vue"
+						),
+				},
+
+				{
+					path: ":participant/edit",
+					name: "mytraining-participant-edit",
+					component: () =>
+						import(
+							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/event-participant/crud/edit.vue"
+						),
+				},
+
+				{
+					path: ":participant/show",
+					name: "mytraining-participant-show",
+					component: () =>
+						import(
+							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/event-participant/crud/show.vue"
+						),
+				},
+			],
+		},
+
 		// event/:event/postest
 		{
 			path: "event/:event/postest",
@@ -273,6 +319,52 @@ export default {
 					component: () =>
 						import(
 							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/history/crud/show.vue"
+						),
+				},
+			],
+		},
+
+		// history/:history/participant
+		{
+			path: "history/:history/participant",
+			component: () =>
+				import(
+					/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/history-participant/index.vue"
+				),
+			children: [
+				{
+					path: "",
+					name: "mytraining-history-participant",
+					component: () =>
+						import(
+							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/history-participant/crud/data.vue"
+						),
+				},
+
+				{
+					path: "create",
+					name: "mytraining-history-participant-create",
+					component: () =>
+						import(
+							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/history-participant/crud/create.vue"
+						),
+				},
+
+				{
+					path: ":participant/edit",
+					name: "mytraining-history-participant-edit",
+					component: () =>
+						import(
+							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/history-participant/crud/edit.vue"
+						),
+				},
+
+				{
+					path: ":participant/show",
+					name: "mytraining-history-participant-show",
+					component: () =>
+						import(
+							/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/history-participant/crud/show.vue"
 						),
 				},
 			],

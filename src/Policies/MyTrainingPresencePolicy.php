@@ -9,14 +9,14 @@ use Illuminate\Auth\Access\Response;
 class MyTrainingPresencePolicy
 {
     /**
-    * Perform pre-authorization checks.
-    */
+     * Perform pre-authorization checks.
+     */
     public function before(SystemUser $user, string $ability): bool|null
     {
         if ($user->hasLicenseAs('mytraining-superadmin')) {
             return true;
         }
-    
+
         return null;
     }
 
@@ -25,7 +25,7 @@ class MyTrainingPresencePolicy
      */
     public function view(SystemUser $user): bool
     {
-        return $user->hasPermission('view-mytraining-presence');
+        return $user->hasPermission('view-mytraining-presence', 'view-mytraining-history-presence');
     }
 
     /**
@@ -33,7 +33,7 @@ class MyTrainingPresencePolicy
      */
     public function show(SystemUser $user, MyTrainingPresence $myTrainingPresence): bool
     {
-        return $user->hasPermission('show-mytraining-presence');
+        return $user->hasPermission('show-mytraining-presence', 'show-mytraining-history-presence');
     }
 
     /**
@@ -41,7 +41,7 @@ class MyTrainingPresencePolicy
      */
     public function create(SystemUser $user): bool
     {
-        return $user->hasPermission('create-mytraining-presence');
+        return $user->hasPermission('create-mytraining-presence', 'create-mytraining-history-presence');
     }
 
     /**
@@ -49,7 +49,7 @@ class MyTrainingPresencePolicy
      */
     public function update(SystemUser $user, MyTrainingPresence $myTrainingPresence): bool
     {
-        return $user->hasPermission('update-mytraining-presence');
+        return $user->hasPermission('update-mytraining-presence', 'update-mytraining-history-presence');
     }
 
     /**
@@ -57,7 +57,7 @@ class MyTrainingPresencePolicy
      */
     public function delete(SystemUser $user, MyTrainingPresence $myTrainingPresence): bool
     {
-        return $user->hasPermission('delete-mytraining-presence');
+        return $user->hasPermission('delete-mytraining-presence', 'delete-mytraining-history-presence');
     }
 
     /**
@@ -65,7 +65,7 @@ class MyTrainingPresencePolicy
      */
     public function restore(SystemUser $user, MyTrainingPresence $myTrainingPresence): bool
     {
-        return $user->hasPermission('restore-mytraining-presence');
+        return $user->hasPermission('restore-mytraining-presence', 'restore-mytraining-history-presence');
     }
 
     /**
@@ -73,6 +73,6 @@ class MyTrainingPresencePolicy
      */
     public function destroy(SystemUser $user, MyTrainingPresence $myTrainingPresence): bool
     {
-        return $user->hasPermission('destroy-mytraining-presence');
+        return $user->hasPermission('destroy-mytraining-presence', 'destroy-mytraining-history-presence');
     }
 }

@@ -9,14 +9,14 @@ use Illuminate\Auth\Access\Response;
 class MyTrainingRundownPolicy
 {
     /**
-    * Perform pre-authorization checks.
-    */
+     * Perform pre-authorization checks.
+     */
     public function before(SystemUser $user, string $ability): bool|null
     {
         if ($user->hasLicenseAs('mytraining-superadmin')) {
             return true;
         }
-    
+
         return null;
     }
 
@@ -25,7 +25,7 @@ class MyTrainingRundownPolicy
      */
     public function view(SystemUser $user): bool
     {
-        return $user->hasPermission('view-mytraining-rundown');
+        return $user->hasPermission('view-mytraining-rundown', 'view-mytraining-history-rundown');
     }
 
     /**
@@ -33,7 +33,7 @@ class MyTrainingRundownPolicy
      */
     public function show(SystemUser $user, MyTrainingRundown $myTrainingRundown): bool
     {
-        return $user->hasPermission('show-mytraining-rundown');
+        return $user->hasPermission('show-mytraining-rundown', 'show-mytraining-history-rundown');
     }
 
     /**
@@ -41,7 +41,7 @@ class MyTrainingRundownPolicy
      */
     public function create(SystemUser $user): bool
     {
-        return $user->hasPermission('create-mytraining-rundown');
+        return $user->hasPermission('create-mytraining-rundown', 'create-mytraining-history-rundown');
     }
 
     /**
@@ -49,7 +49,7 @@ class MyTrainingRundownPolicy
      */
     public function update(SystemUser $user, MyTrainingRundown $myTrainingRundown): bool
     {
-        return $user->hasPermission('update-mytraining-rundown');
+        return $user->hasPermission('update-mytraining-rundown', 'update-mytraining-history-rundown');
     }
 
     /**
@@ -57,7 +57,7 @@ class MyTrainingRundownPolicy
      */
     public function delete(SystemUser $user, MyTrainingRundown $myTrainingRundown): bool
     {
-        return $user->hasPermission('delete-mytraining-rundown');
+        return $user->hasPermission('delete-mytraining-rundown', 'delete-mytraining-history-rundown');
     }
 
     /**
@@ -65,7 +65,7 @@ class MyTrainingRundownPolicy
      */
     public function restore(SystemUser $user, MyTrainingRundown $myTrainingRundown): bool
     {
-        return $user->hasPermission('restore-mytraining-rundown');
+        return $user->hasPermission('restore-mytraining-rundown', 'restore-mytraining-history-rundown');
     }
 
     /**
@@ -73,6 +73,6 @@ class MyTrainingRundownPolicy
      */
     public function destroy(SystemUser $user, MyTrainingRundown $myTrainingRundown): bool
     {
-        return $user->hasPermission('destroy-mytraining-rundown');
+        return $user->hasPermission('destroy-mytraining-rundown', 'destroy-mytraining-history-rundown');
     }
 }

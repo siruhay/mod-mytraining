@@ -9,14 +9,14 @@ use Illuminate\Auth\Access\Response;
 class MyTrainingEventPolicy
 {
     /**
-    * Perform pre-authorization checks.
-    */
+     * Perform pre-authorization checks.
+     */
     public function before(SystemUser $user, string $ability): bool|null
     {
         if ($user->hasLicenseAs('mytraining-superadmin')) {
             return true;
         }
-    
+
         return null;
     }
 
@@ -25,7 +25,7 @@ class MyTrainingEventPolicy
      */
     public function view(SystemUser $user): bool
     {
-        return $user->hasPermission('view-mytraining-event');
+        return $user->hasPermission('view-mytraining-event', 'view-mytraining-history');
     }
 
     /**
@@ -33,7 +33,7 @@ class MyTrainingEventPolicy
      */
     public function show(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
     {
-        return $user->hasPermission('show-mytraining-event');
+        return $user->hasPermission('show-mytraining-event', 'show-mytraining-history');
     }
 
     /**
@@ -41,7 +41,7 @@ class MyTrainingEventPolicy
      */
     public function create(SystemUser $user): bool
     {
-        return $user->hasPermission('create-mytraining-event');
+        return $user->hasPermission('create-mytraining-event', 'create-mytraining-history');
     }
 
     /**
@@ -49,7 +49,7 @@ class MyTrainingEventPolicy
      */
     public function update(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
     {
-        return $user->hasPermission('update-mytraining-event');
+        return $user->hasPermission('update-mytraining-event', 'update-mytraining-history');
     }
 
     /**
@@ -57,7 +57,7 @@ class MyTrainingEventPolicy
      */
     public function delete(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
     {
-        return $user->hasPermission('delete-mytraining-event');
+        return $user->hasPermission('delete-mytraining-event', 'delete-mytraining-history');
     }
 
     /**
@@ -65,7 +65,7 @@ class MyTrainingEventPolicy
      */
     public function restore(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
     {
-        return $user->hasPermission('restore-mytraining-event');
+        return $user->hasPermission('restore-mytraining-event', 'restore-mytraining-history');
     }
 
     /**
@@ -73,6 +73,6 @@ class MyTrainingEventPolicy
      */
     public function destroy(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
     {
-        return $user->hasPermission('destroy-mytraining-event');
+        return $user->hasPermission('destroy-mytraining-event', 'destroy-mytraining-history');
     }
 }
