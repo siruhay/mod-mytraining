@@ -25,6 +25,7 @@ class MyTrainingPostestController extends Controller
         return new QuestionCollection(
             $myTrainingEvent
                 ->questions()
+                ->postest()
                 ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)

@@ -2,6 +2,7 @@
 
 namespace Module\MyTraining\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
@@ -57,6 +58,30 @@ class MyTrainingQuestion extends Model
      * @var string
      */
     protected $defaultOrder = 'name';
+
+    /**
+     * scopePostest function
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopePostest(Builder $query)
+    {
+        return $query
+            ->where('mode', 'POSTEST');
+    }
+
+    /**
+     * scopePretest function
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopePretest(Builder $query)
+    {
+        return $query
+            ->where('mode', 'PRETEST');
+    }
 
     /**
      * The model store method

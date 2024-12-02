@@ -121,6 +121,16 @@ class MyTrainingEvent extends Model
     }
 
     /**
+     * rundowns function
+     *
+     * @return HasMany
+     */
+    public function rundowns(): HasMany
+    {
+        return $this->hasMany(MyTrainingRundown::class, 'event_id');
+    }
+
+    /**
      * questions function
      *
      * @return HasMany

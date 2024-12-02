@@ -25,6 +25,7 @@ class MyTrainingPretestController extends Controller
         return new QuestionCollection(
             $myTrainingEvent
                 ->questions()
+                ->pretest()
                 ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)
