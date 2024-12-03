@@ -48,6 +48,7 @@ class MyTrainingRundown extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'files' => 'array',
         'meta' => 'array'
     ];
 
@@ -57,6 +58,55 @@ class MyTrainingRundown extends Model
      * @var string
      */
     protected $defaultOrder = 'name';
+
+    /**
+     * mapCombos function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapCombos(Request $request): array
+    {
+        $event = MyTrainingEvent::find($request->segment(4));
+
+        return [
+            'speakers' => $event->committees()->where('type', 'SPEAKER')->forCombo()
+        ];
+    }
+
+    /**
+     * mapStatuses function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapStatuses(Request $request, $model = null): array
+    {
+        return [
+            'speaker' => $request->user()->hasLicenseAs('mytraining-speaker') && optional($model)->speaker_id === $request->user()->userable->id
+        ];
+    }
+
+    /**
+     * mapResourceShow function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResourceShow(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'slug' => $model->slug,
+            'datemark' => $model->datemark,
+            'starttime' => $model->starttime,
+            'finishtime' => $model->finishtime,
+            'agenda' => $model->agenda,
+            'speaker_id' => $model->speaker_id,
+            'files' => $model->files,
+        ];
+    }
 
     /**
      * The model store method
@@ -179,6 +229,27 @@ class MyTrainingRundown extends Model
 
         try {
             $model->forceDelete();
+
+            DB::connection($model->connection)->commit();
+
+            return new RundownResource($model);
+        } catch (\Exception $e) {
+            DB::connection($model->connection)->rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public static function uploadFile($model, $filepath)
+    {
+        DB::connection($model->connection)->beginTransaction();
+
+        try {
+            $model['files'] = [$filepath];
+            $model->save();
 
             DB::connection($model->connection)->commit();
 

@@ -53,6 +53,14 @@ class MyTrainingRundownPolicy
     }
 
     /**
+     * Determine whether the user can upload the model.
+     */
+    public function upload(SystemUser $user, MyTrainingRundown $myTrainingRundown): bool
+    {
+        return $user->hasPermission('upload-mytraining-rundown', 'upload-mytraining-history-rundown');
+    }
+
+    /**
      * Determine whether the user can delete the model.
      */
     public function delete(SystemUser $user, MyTrainingRundown $myTrainingRundown): bool

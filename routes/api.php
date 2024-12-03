@@ -28,6 +28,7 @@ Route::resource('event.participant', MyTrainingParticipantController::class)
         'participant' => 'myTrainingParticipant'
     ]);
 
+Route::post('rundown/{myTrainingRundown}/upload', [MyTrainingRundownController::class, 'upload']);
 Route::resource('event.rundown', MyTrainingRundownController::class)
     ->parameters([
         'event' => 'myTrainingEvent',

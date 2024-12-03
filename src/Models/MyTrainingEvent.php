@@ -14,6 +14,7 @@ use Module\Training\Models\TrainingVillage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Module\Training\Models\TrainingSubdistrict;
 use Module\MyTraining\Http\Resources\EventResource;
+use Module\Training\Models\TrainingCommittee;
 
 class MyTrainingEvent extends Model
 {
@@ -108,6 +109,16 @@ class MyTrainingEvent extends Model
             'subdistrict_id'    => $model->subdistrict_id,
             'regency_id'        => $model->regency_id,
         ];
+    }
+
+    /**
+     * committees function
+     *
+     * @return HasMany
+     */
+    public function committees(): HasMany
+    {
+        return $this->hasMany(TrainingCommittee::class, 'event_id');
     }
 
     /**

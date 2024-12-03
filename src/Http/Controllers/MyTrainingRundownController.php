@@ -5,6 +5,7 @@ namespace Module\MyTraining\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Module\MyTraining\Models\MyTrainingRundown;
 use Module\MyTraining\Models\MyTrainingEvent;
 use Module\MyTraining\Http\Resources\RundownCollection;
@@ -118,5 +119,17 @@ class MyTrainingRundownController extends Controller
         Gate::authorize('destroy', $myTrainingRundown);
 
         return MyTrainingRundown::destroyRecord($myTrainingRundown);
+    }
+
+    /**
+     * upload function
+     *
+     * @param Request $request
+     * @param MyTrainingRundown $myTrainingRundown
+     * @return void
+     */
+    public function upload(Request $request, MyTrainingRundown $myTrainingRundown)
+    {
+        return MyTrainingRundown::uploadFile($myTrainingRundown, Storage::disk('local')->put('event', $request->materi));;
     }
 }
