@@ -91,6 +91,7 @@
 						:color="theme"
 						variant="flat"
 						block
+						@click="$router.push({ name: 'mytraining-rundown' })"
 						>rundown</v-btn
 					>
 				</v-col>

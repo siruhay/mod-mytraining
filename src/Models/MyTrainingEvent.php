@@ -70,7 +70,7 @@ class MyTrainingEvent extends Model
     public static function mapStatuses(Request $request, $model = null): array
     {
         return [
-            'participant' => $request->user()->hasLicenseAs('mytraining-participant'),
+            'participant' => $request->user()->hasAnyLicense('mytraining-chairman', 'mytraining-member'),
             'speaker' => $request->user()->hasLicenseAs('mytraining-speaker')
         ];
     }
