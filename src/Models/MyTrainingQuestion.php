@@ -157,6 +157,40 @@ class MyTrainingQuestion extends Model
     }
 
     /**
+     * The model store method
+     *
+     * @param Request $request
+     * @return void
+     */
+    public static function storeRecordPostest(Request $request, MyTrainingEvent $parent)
+    {
+        $model = new static();
+
+        DB::connection($model->connection)->beginTransaction();
+
+        try {
+            $model->name = $request->name;
+            $model->slug = sha1($request->name);
+            $model->mode = 'POSTEST';
+            $model->options = $request->options;
+            $model->answerkey = $request->answerkey;
+
+            $parent->questions()->save($model);
+
+            DB::connection($model->connection)->commit();
+
+            return new QuestionResource($model);
+        } catch (\Exception $e) {
+            DB::connection($model->connection)->rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * The model update method
      *
      * @param Request $request
@@ -171,6 +205,38 @@ class MyTrainingQuestion extends Model
             $model->name = $request->name;
             $model->slug = sha1($request->name);
             $model->mode = 'PRETEST';
+            $model->options = $request->options;
+            $model->answerkey = $request->answerkey;
+            $model->save();
+
+            DB::connection($model->connection)->commit();
+
+            return new QuestionResource($model);
+        } catch (\Exception $e) {
+            DB::connection($model->connection)->rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * The model update method
+     *
+     * @param Request $request
+     * @param [type] $model
+     * @return void
+     */
+    public static function updateRecordPostest(Request $request, $model)
+    {
+        DB::connection($model->connection)->beginTransaction();
+
+        try {
+            $model->name = $request->name;
+            $model->slug = sha1($request->name);
+            $model->mode = 'POSTEST';
             $model->options = $request->options;
             $model->answerkey = $request->answerkey;
             $model->save();
