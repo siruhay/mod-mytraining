@@ -49,7 +49,8 @@ class MyTrainingQuestion extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'meta' => 'array'
+        'meta' => 'array',
+        'options' => 'array'
     ];
 
     /**
@@ -58,6 +59,44 @@ class MyTrainingQuestion extends Model
      * @var string
      */
     protected $defaultOrder = 'name';
+
+    /**
+     * mapRecordBase function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapRecordBase(Request $request): array
+    {
+        return [
+            'id' => null,
+            'name' => null,
+            'answerkey' => null,
+            'options' => [
+                ['key' => 'A', 'text' => ''],
+                ['key' => 'B', 'text' => ''],
+                ['key' => 'C', 'text' => ''],
+                ['key' => 'D', 'text' => '']
+            ]
+        ];
+    }
+
+    /**
+     * mapResourceShow function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResourceShow(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'slug' => $model->slug,
+            'answerkey' => $model->answerkey,
+            'options' => $model->options,
+        ];
+    }
 
     /**
      * scopePostest function
@@ -89,14 +128,19 @@ class MyTrainingQuestion extends Model
      * @param Request $request
      * @return void
      */
-    public static function storeRecord(Request $request, MyTrainingEvent $parent)
+    public static function storeRecordPretest(Request $request, MyTrainingEvent $parent)
     {
         $model = new static();
 
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = sha1($request->name);
+            $model->mode = 'PRETEST';
+            $model->options = $request->options;
+            $model->answerkey = $request->answerkey;
+
             $parent->questions()->save($model);
 
             DB::connection($model->connection)->commit();
@@ -119,12 +163,16 @@ class MyTrainingQuestion extends Model
      * @param [type] $model
      * @return void
      */
-    public static function updateRecord(Request $request, $model)
+    public static function updateRecordPretest(Request $request, $model)
     {
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = sha1($request->name);
+            $model->mode = 'PRETEST';
+            $model->options = $request->options;
+            $model->answerkey = $request->answerkey;
             $model->save();
 
             DB::connection($model->connection)->commit();

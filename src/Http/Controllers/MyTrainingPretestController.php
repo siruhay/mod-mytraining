@@ -47,7 +47,7 @@ class MyTrainingPretestController extends Controller
 
         $request->validate([]);
 
-        return MyTrainingQuestion::storeRecord($request, $myTrainingEvent);
+        return MyTrainingQuestion::storeRecordPretest($request, $myTrainingEvent);
     }
 
     /**
@@ -78,7 +78,7 @@ class MyTrainingPretestController extends Controller
 
         $request->validate([]);
 
-        return MyTrainingQuestion::updateRecord($request, $myTrainingQuestion);
+        return MyTrainingQuestion::updateRecordPretest($request, $myTrainingQuestion);
     }
 
     /**
