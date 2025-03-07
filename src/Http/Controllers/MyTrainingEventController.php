@@ -21,7 +21,8 @@ class MyTrainingEventController extends Controller
         Gate::authorize('view', MyTrainingEvent::class);
 
         return new EventCollection(
-            MyTrainingEvent::applyMode($request->mode)
+            MyTrainingEvent::onlyActive()
+                ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)
                 ->sortBy($request->sortBy)

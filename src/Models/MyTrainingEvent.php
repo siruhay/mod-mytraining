@@ -9,12 +9,13 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 use Module\Training\Models\TrainingVillage;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Module\Training\Models\TrainingSubdistrict;
-use Module\MyTraining\Http\Resources\EventResource;
 use Module\Training\Models\TrainingCommittee;
+use Module\Training\Models\TrainingSubdistrict;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Module\MyTraining\Http\Resources\EventResource;
 
 class MyTrainingEvent extends Model
 {
@@ -109,6 +110,28 @@ class MyTrainingEvent extends Model
             'subdistrict_id'    => $model->subdistrict_id,
             'regency_id'        => $model->regency_id,
         ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeOnlyActive(Builder $query)
+    {
+        return $query->whereNotIn('status', ['REJECTED', 'COMPLETED']);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeOnlyHistory(Builder $query)
+    {
+        return $query->whereIn('status', ['REJECTED', 'COMPLETED']);
     }
 
     /**

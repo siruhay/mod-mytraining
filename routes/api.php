@@ -15,7 +15,6 @@ use Module\MyTraining\Http\Controllers\MyTrainingHistoryRundownController;
 use Module\MyTraining\Http\Controllers\MyTrainingHistoryPresenceController;
 use Module\MyTraining\Http\Controllers\MyTrainingHistoryParticipantController;
 
-
 Route::get('dashboard', [DashboardController::class, 'index']);
 Route::get('report', [DashboardController::class, 'report']);
 
