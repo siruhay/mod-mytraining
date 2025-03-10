@@ -69,15 +69,17 @@ class MyTrainingQuestion extends Model
     public static function mapStatuses(Request $request, $model = null): array
     {
         $parent     = MyTrainingEvent::find($request->segment(4));
-        $speaker    = $request->user()->hasLicenseAs('mytraining-speaker') && optional($model)->speaker_id === $request->user()->userable->id;
+        $speaker    = $request->user()->hasLicenseAs('mytraining-speaker');
 
         return [
-            'canCreate' => $speaker && $parent && $parent->status === 'SUBMITTED',
-            'canEdit' => $speaker && $parent && $parent->status === 'SUBMITTED',
-            'canUpdate' => $speaker && $parent && $parent->status === 'SUBMITTED',
-            'canDelete' => $speaker && $parent && $parent->status === 'SUBMITTED',
-            'canRestore' => $speaker && $parent && $parent->status === 'SUBMITTED',
-            'canDestroy' => $speaker && $parent && $parent->status === 'SUBMITTED',
+            'parent' => $parent,
+            'speaker' => $speaker,
+            'canCreate' => $speaker && $parent && $parent->status === 'ASSIGNED',
+            'canEdit' => $speaker && $parent && $parent->status === 'ASSIGNED',
+            'canUpdate' => $speaker && $parent && $parent->status === 'ASSIGNED',
+            'canDelete' => $speaker && $parent && $parent->status === 'ASSIGNED',
+            'canRestore' => $speaker && $parent && $parent->status === 'ASSIGNED',
+            'canDestroy' => $speaker && $parent && $parent->status === 'ASSIGNED',
         ];
     }
 
