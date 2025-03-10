@@ -26,6 +26,7 @@ class MyTrainingRundownController extends Controller
         return new RundownCollection(
             $myTrainingEvent
                 ->rundowns()
+                ->forCurrentUser($request->user())
                 ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)
@@ -130,6 +131,7 @@ class MyTrainingRundownController extends Controller
      */
     public function upload(Request $request, MyTrainingRundown $myTrainingRundown)
     {
-        return MyTrainingRundown::uploadFile($myTrainingRundown, Storage::disk('local')->put('event', $request->materi));;
+        return MyTrainingRundown::uploadFile($myTrainingRundown, Storage::disk('local')->put('event', $request->materi));
+        ;
     }
 }

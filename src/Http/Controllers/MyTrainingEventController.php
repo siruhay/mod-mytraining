@@ -21,7 +21,7 @@ class MyTrainingEventController extends Controller
         Gate::authorize('view', MyTrainingEvent::class);
 
         return new EventCollection(
-            MyTrainingEvent::onlyActive()
+            MyTrainingEvent::forCurrentUser($request->user())
                 ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)
@@ -72,6 +72,22 @@ class MyTrainingEventController extends Controller
         $request->validate([]);
 
         return MyTrainingEvent::updateRecord($request, $myTrainingEvent);
+    }
+
+    /**
+     * presence function
+     *
+     * @param Request $request
+     * @param MyTrainingEvent $myTrainingEvent
+     * @return void
+     */
+    public function presence(Request $request, MyTrainingEvent $myTrainingEvent)
+    {
+        Gate::authorize('presence', $myTrainingEvent);
+
+        $request->validate([]);
+
+        return MyTrainingEvent::presenceRecord($request, $myTrainingEvent);
     }
 
     /**

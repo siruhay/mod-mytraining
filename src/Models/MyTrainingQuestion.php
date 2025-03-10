@@ -61,6 +61,27 @@ class MyTrainingQuestion extends Model
     protected $defaultOrder = 'name';
 
     /**
+     * mapStatuses function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapStatuses(Request $request, $model = null): array
+    {
+        $parent     = MyTrainingEvent::find($request->segment(4));
+        $speaker    = $request->user()->hasLicenseAs('mytraining-speaker') && optional($model)->speaker_id === $request->user()->userable->id;
+
+        return [
+            'canCreate' => $speaker && $parent && $parent->status === 'SUBMITTED',
+            'canEdit' => $speaker && $parent && $parent->status === 'SUBMITTED',
+            'canUpdate' => $speaker && $parent && $parent->status === 'SUBMITTED',
+            'canDelete' => $speaker && $parent && $parent->status === 'SUBMITTED',
+            'canRestore' => $speaker && $parent && $parent->status === 'SUBMITTED',
+            'canDestroy' => $speaker && $parent && $parent->status === 'SUBMITTED',
+        ];
+    }
+
+    /**
      * mapRecordBase function
      *
      * @param Request $request

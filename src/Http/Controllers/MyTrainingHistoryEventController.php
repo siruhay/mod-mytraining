@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Module\MyTraining\Models\MyTrainingHistoryEvent;
-use Module\MyTraining\Http\Resources\EventCollection;
-use Module\MyTraining\Http\Resources\EventShowResource;
+use Module\MyTraining\Http\Resources\HistoryEventCollection;
+use Module\MyTraining\Http\Resources\HistoryEventShowResource;
 
-class MyTrainingHistoryController extends Controller
+class MyTrainingHistoryEventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,9 +20,8 @@ class MyTrainingHistoryController extends Controller
     {
         Gate::authorize('view', MyTrainingHistoryEvent::class);
 
-        return new EventCollection(
-            MyTrainingHistoryEvent::forCurrentUser($request->user())
-                ->applyMode($request->mode)
+        return new HistoryEventCollection(
+            MyTrainingHistoryEvent::applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)
                 ->sortBy($request->sortBy)
@@ -55,7 +54,7 @@ class MyTrainingHistoryController extends Controller
     {
         Gate::authorize('show', $myTrainingHistoryEvent);
 
-        return new EventShowResource($myTrainingHistoryEvent);
+        return new HistoryEventShowResource($myTrainingHistoryEvent);
     }
 
     /**

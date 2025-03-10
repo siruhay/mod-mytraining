@@ -1,9 +1,5 @@
 <template>
-	<form-show
-		hide-edit
-		hide-delete
-		with-helpdesk
-	>
+	<form-show hide-edit hide-delete with-helpdesk>
 		<template
 			v-slot:default="{
 				combos: { speakers },
@@ -70,17 +66,14 @@
 			<v-card-text>
 				<v-sheet
 					v-for="(file, fileIndex) in record.files"
+					:key="fileIndex"
 					class="pa-1"
 					:color="`${theme}-lighten-4`"
 					rounded="pill"
 				>
 					<div class="d-flex align-center">
 						<div class="px-4 flex-grow-1">{{ file }}</div>
-						<v-btn
-							:color="theme"
-							size="small"
-							icon
-						>
+						<v-btn :color="theme" size="small" icon>
 							<v-icon>cloud_download</v-icon>
 						</v-btn>
 					</div>
@@ -127,6 +120,10 @@ export default {
 				params: {
 					materi: record.file,
 				},
+			}).then(() => {
+				this.$router.push({
+					name: "mytraining-rundown",
+				});
 			});
 		},
 	},

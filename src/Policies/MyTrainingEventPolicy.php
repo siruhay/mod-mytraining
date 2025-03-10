@@ -53,6 +53,20 @@ class MyTrainingEventPolicy
     }
 
     /**
+     * presence function
+     *
+     * @param SystemUser $user
+     * @param MyTrainingEvent $myTrainingEvent
+     * @return boolean
+     */
+    public function presence(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
+    {
+        return
+            $myTrainingEvent->status === 'PUBLISHED' &&
+            $user->hasLicenseAs('mytraining-member');
+    }
+
+    /**
      * Determine whether the user can delete the model.
      */
     public function delete(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool

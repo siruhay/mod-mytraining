@@ -25,6 +25,7 @@ class MyTrainingParticipantController extends Controller
         return new ParticipantCollection(
             $myTrainingEvent
                 ->participants()
+                ->with(['gender', 'subdistrict'])
                 ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)

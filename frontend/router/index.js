@@ -260,6 +260,26 @@ export default {
 			],
 		},
 
+		// event/:event/member-pretest
+		{
+			path: "event/:event/member-pretest",
+			name: "mytraining-member-pretest",
+			component: () =>
+				import(
+					/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/event-member-pretest/index.vue"
+				),
+		},
+
+		// event/:event/member-pretest
+		{
+			path: "event/:event/member-postest",
+			name: "mytraining-member-postest",
+			component: () =>
+				import(
+					/* webpackChunkName: "mytraining" */ "@modules/mytraining/frontend/pages/event-member-postest/index.vue"
+				),
+		},
+
 		// history
 		{
 			path: "history",

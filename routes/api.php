@@ -18,6 +18,7 @@ use Module\MyTraining\Http\Controllers\MyTrainingHistoryParticipantController;
 Route::get('dashboard', [DashboardController::class, 'index']);
 Route::get('report', [DashboardController::class, 'report']);
 
+Route::post('event/{myTrainingEvent}/presence', [MyTrainingEventController::class, 'presence']);
 Route::resource('event', MyTrainingEventController::class)
     ->parameters(['event' => 'myTrainingEvent']);
 
@@ -46,41 +47,41 @@ Route::resource('event.postest', MyTrainingPostestController::class)
         'postest' => 'myTrainingQuestion'
     ]);
 
-Route::resource('event.presence', MyTrainingPresenceController::class)
-    ->parameters([
-        'event' => 'myTrainingEvent',
-        'presence' => 'myTrainingPresence'
-    ]);
+// Route::resource('event.presence', MyTrainingPresenceController::class)
+//     ->parameters([
+//         'event' => 'myTrainingEvent',
+//         'presence' => 'myTrainingPresence'
+//     ]);
 
 Route::resource('history', MyTrainingHistoryController::class)
-    ->parameters(['history' => 'myTrainingEvent']);
+    ->parameters(['history' => 'myTrainingHistoryEvent']);
 
 Route::resource('history.participant', MyTrainingHistoryParticipantController::class)
     ->parameters([
-        'history' => 'myTrainingEvent',
+        'history' => 'myTrainingHistoryEvent',
         'participant' => 'myTrainingParticipant'
     ]);
 
 Route::resource('history.rundown', MyTrainingHistoryRundownController::class)
     ->parameters([
-        'history' => 'myTrainingEvent',
+        'history' => 'myTrainingHistoryEvent',
         'rundown' => 'myTrainingRundown'
     ]);
 
 Route::resource('history.pretest', MyTrainingHistoryPretestController::class)
     ->parameters([
-        'history' => 'myTrainingEvent',
+        'history' => 'myTrainingHistoryEvent',
         'pretest' => 'myTrainingQuestion'
     ]);
 
 Route::resource('history.postest', MyTrainingHistoryPostestController::class)
     ->parameters([
-        'history' => 'myTrainingEvent',
+        'history' => 'myTrainingHistoryEvent',
         'postest' => 'myTrainingQuestion'
     ]);
 
 Route::resource('history.presence', MyTrainingHistoryPresenceController::class)
     ->parameters([
-        'history' => 'myTrainingEvent',
+        'history' => 'myTrainingHistoryEvent',
         'presence' => 'myTrainingPresence'
     ]);

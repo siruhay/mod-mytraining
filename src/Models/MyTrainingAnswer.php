@@ -9,15 +9,10 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
-use Module\Reference\Models\ReferenceGender;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Module\MyTraining\Models\MyTrainingEvent;
-use Module\Reference\Models\ReferenceVillage;
-use Module\Reference\Models\ReferenceSubdistrict;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Module\MyTraining\Http\Resources\ParticipantResource;
+use Module\MyTraining\Http\Resources\AnswerResource;
 
-class MyTrainingParticipant extends Model
+class MyTrainingAnswer extends Model
 {
     use Filterable;
     use HasMeta;
@@ -37,14 +32,14 @@ class MyTrainingParticipant extends Model
      *
      * @var string
      */
-    protected $table = 'training_participants';
+    protected $table = 'training_answers';
 
     /**
      * The roles variable
      *
      * @var array
      */
-    protected $roles = ['mytraining-participant'];
+    protected $roles = ['mytraining-answer'];
 
     /**
      * The attributes that should be cast to native types.
@@ -63,105 +58,12 @@ class MyTrainingParticipant extends Model
     protected $defaultOrder = 'name';
 
     /**
-     * mapHeaders function
-     *
-     * readonly value?: SelectItemKey<any>
-     * readonly title?: string | undefined
-     * readonly align?: 'start' | 'end' | 'center' | undefined
-     * readonly width?: string | number | undefined
-     * readonly minWidth?: string | undefined
-     * readonly maxWidth?: string | undefined
-     * readonly nowrap?: boolean | undefined
-     * readonly sortable?: boolean | undefined
-     *
-     * @param Request $request
-     * @return array
-     */
-    public static function mapHeaders(Request $request): array
-    {
-        return [
-            ['title' => 'Name', 'value' => 'name'],
-            ['title' => 'Gender', 'value' => 'gender_name'],
-            ['title' => 'Subdistrict', 'value' => 'subdistrict_name'],
-            ['title' => 'Checkin', 'value' => 'checkin'],
-            ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
-        ];
-    }
-
-    /**
-     * mapResource function
-     *
-     * @param Request $request
-     * @return array
-     */
-    public static function mapResource(Request $request, $model): array
-    {
-        return [
-            'id' => $model->id,
-            'name' => $model->name,
-            'gender_id' => $model->gender_id,
-            'gender_name' => optional($model->gender)->name,
-            'subdistrict_id' => $model->subdistrict_id,
-            'subdistrict_name' => optional($model->subdistrict)->name,
-            'checkin' => !is_null($model->accepted_at),
-
-            'subtitle' => (string) $model->updated_at,
-            'updated_at' => (string) $model->updated_at,
-        ];
-    }
-
-    /**
-     * mapResourceShow function
-     *
-     * @param Request $request
-     * @return array
-     */
-    public static function mapResourceShow(Request $request, $model): array
-    {
-        return [
-            'id' => $model->id,
-            'name' => $model->name,
-        ];
-    }
-
-    /**
-     * gender function
-     *
-     * @return BelongsTo
-     */
-    public function gender(): BelongsTo
-    {
-        return $this->belongsTo(ReferenceGender::class, 'gender_id');
-    }
-
-    /**
-     * subdistrict function
-     *
-     * @return BelongsTo
-     */
-    public function subdistrict(): BelongsTo
-    {
-        return $this->belongsTo(ReferenceSubdistrict::class, 'subdistrict_id');
-    }
-
-    /**
-     * village function
-     *
-     * @return BelongsTo
-     */
-    public function village(): BelongsTo
-    {
-        return $this->belongsTo(ReferenceVillage::class, 'village_id');
-    }
-
-
-    /**
      * The model store method
      *
      * @param Request $request
      * @return void
      */
-    public static function storeRecord(Request $request, MyTrainingEvent $parent)
+    public static function storeRecord(Request $request)
     {
         $model = new static();
 
@@ -169,11 +71,11 @@ class MyTrainingParticipant extends Model
 
         try {
             // ...
-            $parent->participants()->save($model);
+            $model->save();
 
             DB::connection($model->connection)->commit();
 
-            return new ParticipantResource($model);
+            return new AnswerResource($model);
         } catch (\Exception $e) {
             DB::connection($model->connection)->rollBack();
 
@@ -201,7 +103,7 @@ class MyTrainingParticipant extends Model
 
             DB::connection($model->connection)->commit();
 
-            return new ParticipantResource($model);
+            return new AnswerResource($model);
         } catch (\Exception $e) {
             DB::connection($model->connection)->rollBack();
 
@@ -227,7 +129,7 @@ class MyTrainingParticipant extends Model
 
             DB::connection($model->connection)->commit();
 
-            return new ParticipantResource($model);
+            return new AnswerResource($model);
         } catch (\Exception $e) {
             DB::connection($model->connection)->rollBack();
 
@@ -253,7 +155,7 @@ class MyTrainingParticipant extends Model
 
             DB::connection($model->connection)->commit();
 
-            return new ParticipantResource($model);
+            return new AnswerResource($model);
         } catch (\Exception $e) {
             DB::connection($model->connection)->rollBack();
 
@@ -279,7 +181,7 @@ class MyTrainingParticipant extends Model
 
             DB::connection($model->connection)->commit();
 
-            return new ParticipantResource($model);
+            return new AnswerResource($model);
         } catch (\Exception $e) {
             DB::connection($model->connection)->rollBack();
 

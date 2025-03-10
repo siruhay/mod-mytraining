@@ -70,9 +70,18 @@ class MyTrainingEvent extends Model
      */
     public static function mapStatuses(Request $request, $model = null): array
     {
+        if ($request->user()->hasLicenseAs('mytraining-member')) {
+            return [
+                'hasPresence' => $model ? $model->participants()->firstWhere('particiable_id', $request->user()->userable->id)->accepted_at === null : false,
+                'hasPretest' => $model ? $model->questions()->where('mode', 'PRETEST')->count() > 0 : false,
+                'hasPostest' => $model ? $model->questions()->where('mode', 'POSTEST')->count() > 0 : false,
+                'isMember' => $request->user()->hasLicenseAs('mytraining-member'),
+                // 'isSpeaker' => $request->user()->hasLicenseAs('mytraining-speaker')
+            ];
+        }
+
         return [
-            'participant' => $request->user()->hasAnyLicense('mytraining-chairman', 'mytraining-member'),
-            'speaker' => $request->user()->hasLicenseAs('mytraining-speaker')
+            'isSpeaker' => $request->user()->hasLicenseAs('mytraining-speaker')
         ];
     }
 
@@ -93,6 +102,52 @@ class MyTrainingEvent extends Model
     }
 
     /**
+     * mapHeaders function
+     *
+     * readonly value?: SelectItemKey<any>
+     * readonly title?: string | undefined
+     * readonly align?: 'start' | 'end' | 'center' | undefined
+     * readonly width?: string | number | undefined
+     * readonly minWidth?: string | undefined
+     * readonly maxWidth?: string | undefined
+     * readonly nowrap?: boolean | undefined
+     * readonly sortable?: boolean | undefined
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapHeaders(Request $request): array
+    {
+        return [
+            ['title' => 'Name', 'value' => 'name'],
+            ['title' => 'Start', 'value' => 'startdate'],
+            ['title' => 'Finish', 'value' => 'finishdate'],
+            ['title' => 'Status', 'value' => 'status'],
+            ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
+        ];
+    }
+
+    /**
+     * mapResource function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResource(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'startdate' => $model->startdate,
+            'finishdate' => $model->finishdate,
+            'status' => $model->status,
+
+            'subtitle' => (string) $model->updated_at,
+            'updated_at' => (string) $model->updated_at,
+        ];
+    }
+
+    /**
      * mapResourceShow function
      *
      * @param Request $request
@@ -109,6 +164,7 @@ class MyTrainingEvent extends Model
             'village_id'        => $model->village_id,
             'subdistrict_id'    => $model->subdistrict_id,
             'regency_id'        => $model->regency_id,
+            'status'            => $model->status,
         ];
     }
 
@@ -165,6 +221,16 @@ class MyTrainingEvent extends Model
     }
 
     /**
+     * answers function
+     *
+     * @return HasMany
+     */
+    public function answers(): HasMany
+    {
+        return $this->hasMany(MyTrainingAnswer::class, 'event_id');
+    }
+
+    /**
      * questions function
      *
      * @return HasMany
@@ -172,6 +238,42 @@ class MyTrainingEvent extends Model
     public function questions(): HasMany
     {
         return $this->hasMany(MyTrainingQuestion::class, 'event_id');
+    }
+
+    /**
+     * booted function
+     *
+     * @return void
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('onlyActive', function (Builder $query) {
+            $query->whereNotIn('status', ['COMPLETED', 'REJECTED']);
+        });
+    }
+
+    /**
+     * scopeForCurrentUser function
+     *
+     * @param Builder $query
+     * @param [type] $user
+     * @return void
+     */
+    public function scopeForCurrentUser(Builder $query, $user)
+    {
+        if ($user->hasLicenseAs('mytraining-speaker')) {
+            return $query
+                ->whereIn('status', ['ASSIGNED', 'PUBLISHED', 'CERTIFICATE'])
+                ->whereHas('rundowns', function ($subquery) use ($user) {
+                    $subquery->where('speaker_id', $user->userable->id);
+                });
+        }
+
+        return $query
+            ->whereIn('status', ['PUBLISHED', 'CERTIFICATE'])
+            ->whereHas('participants', function ($subquery) use ($user) {
+                $subquery->where('particiable_id', $user->userable->id);
+            });
     }
 
     /**
@@ -217,6 +319,36 @@ class MyTrainingEvent extends Model
         try {
             // ...
             $model->save();
+
+            DB::connection($model->connection)->commit();
+
+            return new EventResource($model);
+        } catch (\Exception $e) {
+            DB::connection($model->connection)->rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * presenceRecord function
+     *
+     * @param Request $request
+     * @param [type] $model
+     * @return void
+     */
+    public static function presenceRecord(Request $request, $model)
+    {
+        $participant = $model->participants()->firstWhere('particiable_id', $request->user()->userable->id);
+
+        DB::connection($model->connection)->beginTransaction();
+
+        try {
+            $participant->accepted_at = now();
+            $participant->save();
 
             DB::connection($model->connection)->commit();
 

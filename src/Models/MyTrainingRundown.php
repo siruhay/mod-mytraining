@@ -82,8 +82,60 @@ class MyTrainingRundown extends Model
      */
     public static function mapStatuses(Request $request, $model = null): array
     {
+        $parent = MyTrainingEvent::find($request->segment(4));
+
         return [
+            'canCreate' => false,
+            'canEdit' => false,
+            'canUpdate' => $parent && $request->user()->hasLicenseAs('mytraining-speaker') && $parent->status === 'SUBMITTED',
+            'canDelete' => false,
+            'canRestore' => false,
+            'canDestroy' => false,
             'speaker' => $request->user()->hasLicenseAs('mytraining-speaker') && optional($model)->speaker_id === $request->user()->userable->id
+        ];
+    }
+
+    /**
+     * mapHeaders function
+     *
+     * readonly value?: SelectItemKey<any>
+     * readonly title?: string | undefined
+     * readonly align?: 'start' | 'end' | 'center' | undefined
+     * readonly width?: string | number | undefined
+     * readonly minWidth?: string | undefined
+     * readonly maxWidth?: string | undefined
+     * readonly nowrap?: boolean | undefined
+     * readonly sortable?: boolean | undefined
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapHeaders(Request $request): array
+    {
+        return [
+            ['title' => 'Name', 'value' => 'name'],
+            ['title' => 'Agenda', 'value' => 'agenda'],
+            ['title' => 'Narasumber', 'value' => 'speaker_name'],
+            ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
+        ];
+    }
+
+    /**
+     * mapResource function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResource(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'agenda' => $model->agenda,
+            'speaker_name' => $model->speaker_name,
+
+            'subtitle' => (string) $model->updated_at,
+            'updated_at' => (string) $model->updated_at,
         ];
     }
 
@@ -106,6 +158,15 @@ class MyTrainingRundown extends Model
             'speaker_id' => $model->speaker_id,
             'files' => $model->files,
         ];
+    }
+
+    public function scopeForCurrentUser($query, $user)
+    {
+        if ($user->hasLicenseAs('mytraining-speaker')) {
+            return $query->where('speaker_id', $user->userable->id);
+        }
+
+        return $query;
     }
 
     /**
