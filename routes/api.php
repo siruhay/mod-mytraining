@@ -9,6 +9,8 @@ use Module\MyTraining\Http\Controllers\MyTrainingPretestController;
 use Module\MyTraining\Http\Controllers\MyTrainingRundownController;
 use Module\MyTraining\Http\Controllers\MyTrainingPresenceController;
 use Module\MyTraining\Http\Controllers\MyTrainingParticipantController;
+use Module\MyTraining\Http\Controllers\MyTrainingMemberPostestController;
+use Module\MyTraining\Http\Controllers\MyTrainingMemberPretestController;
 use Module\MyTraining\Http\Controllers\MyTrainingHistoryPostestController;
 use Module\MyTraining\Http\Controllers\MyTrainingHistoryPretestController;
 use Module\MyTraining\Http\Controllers\MyTrainingHistoryRundownController;
@@ -47,11 +49,17 @@ Route::resource('event.postest', MyTrainingPostestController::class)
         'postest' => 'myTrainingQuestion'
     ]);
 
-// Route::resource('event.presence', MyTrainingPresenceController::class)
-//     ->parameters([
-//         'event' => 'myTrainingEvent',
-//         'presence' => 'myTrainingPresence'
-//     ]);
+Route::resource('event.member-pretest', MyTrainingMemberPretestController::class)
+    ->parameters([
+        'event' => 'myTrainingEvent',
+        'member-pretest' => 'myTrainingQuestion'
+    ]);
+
+Route::resource('event.member-postest', MyTrainingMemberPostestController::class)
+    ->parameters([
+        'event' => 'myTrainingEvent',
+        'member-pretest' => 'myTrainingQuestion'
+    ]);
 
 Route::resource('history', MyTrainingHistoryController::class)
     ->parameters(['history' => 'myTrainingHistoryEvent']);

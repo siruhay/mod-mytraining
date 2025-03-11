@@ -9,6 +9,7 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Module\MyTraining\Http\Resources\AnswerResource;
 
@@ -56,6 +57,18 @@ class MyTrainingAnswer extends Model
      * @var string
      */
     protected $defaultOrder = 'name';
+
+    /**
+     * scopeForCurrentUser function
+     *
+     * @param Builder $query
+     * @param [type] $user
+     * @return void
+     */
+    public function scopeForCurrentUser(Builder $query, $user)
+    {
+        return $query->where('participant_id', $user->userable->id);
+    }
 
     /**
      * The model store method
