@@ -5,9 +5,9 @@ namespace Module\MyTraining\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use Module\MyTraining\Http\Resources\PretestCollection;
 use Module\MyTraining\Models\MyTrainingEvent;
 use Module\MyTraining\Models\MyTrainingPretest;
-use Module\MyTraining\Http\Resources\PretestCollection;
 
 class MyTrainingMemberPretestController extends Controller
 {

@@ -52,7 +52,7 @@ class MyTrainingPretestPolicy
         $isParticipant = $myTrainingPretest
             ->event
             ->participants()
-            ->firstWhere('particiable_id', $user->userable->id);
+            ->where('particiable_id', $user->userable->id)->count() > 0;
 
         return
             $isParticipant &&
