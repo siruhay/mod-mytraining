@@ -2,7 +2,6 @@
 
 namespace Module\MyTraining\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
@@ -10,9 +9,10 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Module\MyTraining\Models\MyTrainingEvent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Module\MyTraining\Http\Resources\QuestionResource;
 
 class MyTrainingQuestion extends Model

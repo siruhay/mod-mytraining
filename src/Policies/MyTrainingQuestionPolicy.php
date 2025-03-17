@@ -41,7 +41,9 @@ class MyTrainingQuestionPolicy
      */
     public function create(SystemUser $user): bool
     {
-        return $user->hasAnyPermission('create-mytraining-pretest', 'create-mytraining-postest', 'create-mytraining-prhistory-etest', 'create-mytraining-history-postest');
+        return
+            $user->hasLicenseAs('mytraining-speaker') &&
+            $user->hasAnyPermission('create-mytraining-pretest', 'create-mytraining-postest', 'create-mytraining-prhistory-etest', 'create-mytraining-history-postest');
     }
 
     /**
@@ -49,7 +51,9 @@ class MyTrainingQuestionPolicy
      */
     public function update(SystemUser $user, MyTrainingQuestion $myTrainingQuestion): bool
     {
-        return $user->hasAnyPermission('update-mytraining-pretest', 'update-mytraining-postest', 'update-mytraining-prhistory-etest', 'update-mytraining-history-postest');
+        return
+            $user->hasLicenseAs('mytraining-speaker') &&
+            $user->hasAnyPermission('update-mytraining-pretest', 'update-mytraining-postest', 'update-mytraining-prhistory-etest', 'update-mytraining-history-postest');
     }
 
     /**
@@ -57,7 +61,9 @@ class MyTrainingQuestionPolicy
      */
     public function delete(SystemUser $user, MyTrainingQuestion $myTrainingQuestion): bool
     {
-        return $user->hasAnyPermission('delete-mytraining-pretest', 'delete-mytraining-postest', 'delete-mytraining-prhistory-etest', 'delete-mytraining-history-postest');
+        return
+            $user->hasLicenseAs('mytraining-speaker') &&
+            $user->hasAnyPermission('delete-mytraining-pretest', 'delete-mytraining-postest', 'delete-mytraining-prhistory-etest', 'delete-mytraining-history-postest');
     }
 
     /**

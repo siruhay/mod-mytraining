@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Module\MyTraining\Models\MyTrainingEvent;
-use Module\MyTraining\Models\MyTrainingQuestion;
-use Module\MyTraining\Http\Resources\QuestionMapCollection;
+use Module\MyTraining\Models\MyTrainingPretest;
+use Module\MyTraining\Http\Resources\PretestCollection;
 
 class MyTrainingMemberPretestController extends Controller
 {
@@ -19,10 +19,10 @@ class MyTrainingMemberPretestController extends Controller
      */
     public function index(Request $request, MyTrainingEvent $myTrainingEvent)
     {
-        Gate::authorize('view', MyTrainingQuestion::class);
+        Gate::authorize('view', MyTrainingPretest::class);
 
         return response()->json([
-            'data' => new QuestionMapCollection($myTrainingEvent->questions()->where('mode', 'PRETEST')->get()),
+            'data' => new PretestCollection($myTrainingEvent->questions()->where('mode', 'PRETEST')->get()),
             'setups'  => [
                 'statuses' => [
                     'isCompleted' => $myTrainingEvent->questions()->where('mode', 'POSTEST')->count() === $myTrainingEvent->answers()->where('mode', 'POSTEST')->forCurrentUser($request->user())->count()
@@ -36,17 +36,17 @@ class MyTrainingMemberPretestController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Module\MyTraining\Models\MyTrainingEvent $myTrainingEvent
-     * @param  \Module\MyTraining\Models\MyTrainingQuestion $myTrainingQuestion
+     * @param  \Module\MyTraining\Models\MyTrainingPretest $myTrainingPretest
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MyTrainingEvent $myTrainingEvent, MyTrainingQuestion $myTrainingQuestion)
+    public function update(Request $request, MyTrainingEvent $myTrainingEvent, MyTrainingPretest $myTrainingPretest)
     {
-        Gate::authorize('update', $myTrainingQuestion);
+        Gate::authorize('update', $myTrainingPretest);
 
         $request->validate([
             'answer' => 'required'
         ]);
 
-        return MyTrainingQuestion::updateRecord($request, $myTrainingQuestion, $myTrainingEvent);
+        return MyTrainingPretest::updateRecord($request, $myTrainingPretest, $myTrainingEvent);
     }
 }
