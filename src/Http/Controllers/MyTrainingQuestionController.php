@@ -77,7 +77,7 @@ class MyTrainingQuestionController extends Controller
 
         $request->validate([]);
 
-        return MyTrainingQuestion::updateRecord($request, $myTrainingQuestion);
+        return MyTrainingQuestion::updateRecord($request, $myTrainingQuestion, $myTrainingEvent);
     }
 
     /**

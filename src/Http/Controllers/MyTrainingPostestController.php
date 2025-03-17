@@ -20,7 +20,7 @@ class MyTrainingPostestController extends Controller
      */
     public function index(Request $request, MyTrainingEvent $myTrainingEvent)
     {
-        Gate::authorize('view', MyTrainingQuestion::class);
+        Gate::authorize('view', [MyTrainingQuestion::class, $myTrainingEvent]);
 
         return new QuestionCollection(
             $myTrainingEvent
@@ -43,7 +43,7 @@ class MyTrainingPostestController extends Controller
      */
     public function store(Request $request, MyTrainingEvent $myTrainingEvent)
     {
-        Gate::authorize('create', MyTrainingQuestion::class);
+        Gate::authorize('create', [MyTrainingQuestion::class, $myTrainingEvent]);
 
         $request->validate([]);
 
@@ -59,7 +59,7 @@ class MyTrainingPostestController extends Controller
      */
     public function show(MyTrainingEvent $myTrainingEvent, MyTrainingQuestion $myTrainingQuestion)
     {
-        Gate::authorize('show', $myTrainingQuestion);
+        Gate::authorize('show', [$myTrainingQuestion, $myTrainingEvent]);
 
         return new QuestionShowResource($myTrainingQuestion);
     }
@@ -74,7 +74,7 @@ class MyTrainingPostestController extends Controller
      */
     public function update(Request $request, MyTrainingEvent $myTrainingEvent, MyTrainingQuestion $myTrainingQuestion)
     {
-        Gate::authorize('update', $myTrainingQuestion);
+        Gate::authorize('update', [$myTrainingQuestion, $myTrainingEvent]);
 
         $request->validate([]);
 
@@ -90,7 +90,7 @@ class MyTrainingPostestController extends Controller
      */
     public function destroy(MyTrainingEvent $myTrainingEvent, MyTrainingQuestion $myTrainingQuestion)
     {
-        Gate::authorize('delete', $myTrainingQuestion);
+        Gate::authorize('delete', [$myTrainingQuestion, $myTrainingEvent]);
 
         return MyTrainingQuestion::deleteRecord($myTrainingQuestion);
     }

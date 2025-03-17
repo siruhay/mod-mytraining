@@ -65,9 +65,14 @@ class MyTrainingQuestionPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(SystemUser $user, MyTrainingQuestion $myTrainingQuestion): bool
+    public function update(SystemUser $user, MyTrainingQuestion $myTrainingQuestion, MyTrainingEvent $myTrainingEvent): bool
     {
+        $isCommittee = $myTrainingEvent
+            ->committees()
+            ->where('biodata_id', $user->userable->biodata_id)->count() > 0;
+
         return
+            $isCommittee &&
             $user->hasLicenseAs('mytraining-speaker') &&
             $user->hasAnyPermission('update-mytraining-pretest', 'update-mytraining-postest', 'update-mytraining-history-pretest', 'update-mytraining-history-postest');
     }
@@ -75,9 +80,14 @@ class MyTrainingQuestionPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(SystemUser $user, MyTrainingQuestion $myTrainingQuestion): bool
+    public function delete(SystemUser $user, MyTrainingQuestion $myTrainingQuestion, MyTrainingEvent $myTrainingEvent): bool
     {
+        $isCommittee = $myTrainingEvent
+            ->committees()
+            ->where('biodata_id', $user->userable->biodata_id)->count() > 0;
+
         return
+            $isCommittee &&
             $user->hasLicenseAs('mytraining-speaker') &&
             $user->hasAnyPermission('delete-mytraining-pretest', 'delete-mytraining-postest', 'delete-mytraining-history-pretest', 'delete-mytraining-history-postest');
     }
