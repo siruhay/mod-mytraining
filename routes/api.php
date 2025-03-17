@@ -58,7 +58,7 @@ Route::resource('event.member-pretest', MyTrainingMemberPretestController::class
 Route::resource('event.member-postest', MyTrainingMemberPostestController::class)
     ->parameters([
         'event' => 'myTrainingEvent',
-        'member-pretest' => 'myTrainingQuestion'
+        'member-postest' => 'myTrainingQuestion'
     ]);
 
 Route::resource('history', MyTrainingHistoryController::class)
