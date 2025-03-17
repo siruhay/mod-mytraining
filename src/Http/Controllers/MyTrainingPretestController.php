@@ -20,7 +20,7 @@ class MyTrainingPretestController extends Controller
      */
     public function index(Request $request, MyTrainingEvent $myTrainingEvent)
     {
-        Gate::authorize('view', MyTrainingQuestion::class);
+        Gate::authorize('view', $myTrainingEvent);
 
         return new QuestionCollection(
             $myTrainingEvent
@@ -43,7 +43,7 @@ class MyTrainingPretestController extends Controller
      */
     public function store(Request $request, MyTrainingEvent $myTrainingEvent)
     {
-        Gate::authorize('create', MyTrainingQuestion::class);
+        Gate::authorize('create', $myTrainingEvent);
 
         $request->validate([]);
 
@@ -59,7 +59,7 @@ class MyTrainingPretestController extends Controller
      */
     public function show(MyTrainingEvent $myTrainingEvent, MyTrainingQuestion $myTrainingQuestion)
     {
-        Gate::authorize('show', $myTrainingQuestion);
+        Gate::authorize('show', $myTrainingQuestion, $myTrainingEvent);
 
         return new QuestionShowResource($myTrainingQuestion);
     }

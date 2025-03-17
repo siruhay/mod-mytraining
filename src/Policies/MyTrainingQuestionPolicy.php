@@ -5,6 +5,7 @@ namespace Module\MyTraining\Policies;
 use Module\System\Models\SystemUser;
 use Module\MyTraining\Models\MyTrainingQuestion;
 use Illuminate\Auth\Access\Response;
+use Module\MyTraining\Models\MyTrainingEvent;
 
 class MyTrainingQuestionPolicy
 {
@@ -23,27 +24,42 @@ class MyTrainingQuestionPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function view(SystemUser $user): bool
+    public function view(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
     {
-        return $user->hasAnyPermission('view-mytraining-pretest', 'view-mytraining-postest', 'view-mytraining-history-pretest', 'view-mytraining-history-postest');
+        $isCommittee = $myTrainingEvent
+            ->committees()
+            ->where('biodata_id', $user->userable->biodata_id)->count() > 0;
+
+        return $isCommittee && $user->hasAnyPermission('view-mytraining-pretest', 'view-mytraining-postest', 'view-mytraining-history-pretest', 'view-mytraining-history-postest');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function show(SystemUser $user, MyTrainingQuestion $myTrainingQuestion): bool
+    public function show(SystemUser $user, MyTrainingQuestion $myTrainingQuestion, MyTrainingEvent $myTrainingEvent): bool
     {
-        return $user->hasAnyPermission('show-mytraining-pretest', 'show-mytraining-postest', 'show-mytraining-history-pretest', 'show-mytraining-history-postest');
+        $isCommittee = $myTrainingEvent
+            ->committees()
+            ->where('biodata_id', $user->userable->biodata_id)->count() > 0;
+
+        return
+            $isCommittee &&
+            $user->hasAnyPermission('show-mytraining-pretest', 'show-mytraining-postest', 'show-mytraining-history-pretest', 'show-mytraining-history-postest');
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(SystemUser $user): bool
+    public function create(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
     {
+        $isCommittee = $myTrainingEvent
+            ->committees()
+            ->where('biodata_id', $user->userable->biodata_id)->count() > 0;
+
         return
+            $isCommittee &&
             $user->hasLicenseAs('mytraining-speaker') &&
-            $user->hasAnyPermission('create-mytraining-pretest', 'create-mytraining-postest', 'create-mytraining-prhistory-etest', 'create-mytraining-history-postest');
+            $user->hasAnyPermission('create-mytraining-pretest', 'create-mytraining-postest', 'create-mytraining-history-pretest', 'create-mytraining-history-postest');
     }
 
     /**
@@ -53,7 +69,7 @@ class MyTrainingQuestionPolicy
     {
         return
             $user->hasLicenseAs('mytraining-speaker') &&
-            $user->hasAnyPermission('update-mytraining-pretest', 'update-mytraining-postest', 'update-mytraining-prhistory-etest', 'update-mytraining-history-postest');
+            $user->hasAnyPermission('update-mytraining-pretest', 'update-mytraining-postest', 'update-mytraining-history-pretest', 'update-mytraining-history-postest');
     }
 
     /**
@@ -63,7 +79,7 @@ class MyTrainingQuestionPolicy
     {
         return
             $user->hasLicenseAs('mytraining-speaker') &&
-            $user->hasAnyPermission('delete-mytraining-pretest', 'delete-mytraining-postest', 'delete-mytraining-prhistory-etest', 'delete-mytraining-history-postest');
+            $user->hasAnyPermission('delete-mytraining-pretest', 'delete-mytraining-postest', 'delete-mytraining-history-pretest', 'delete-mytraining-history-postest');
     }
 
     /**
