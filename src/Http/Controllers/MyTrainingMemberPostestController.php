@@ -47,6 +47,6 @@ class MyTrainingMemberPostestController extends Controller
             'answer' => 'required'
         ]);
 
-        return MyTrainingQuestion::updateRecord($request, $myTrainingQuestion);
+        return MyTrainingQuestion::updateRecord($request, $myTrainingQuestion, $myTrainingEvent);
     }
 }

@@ -360,7 +360,7 @@ class MyTrainingQuestion extends Model
      * @param [type] $model
      * @return void
      */
-    public static function updateRecord($request, $quest)
+    public static function updateRecord($request, $quest, $parent)
     {
         if (!$model = $quest->answers()->firstWhere('participant_id', $request->user()->userable->id)) {
             $model = new MyTrainingAnswer();
@@ -369,7 +369,7 @@ class MyTrainingQuestion extends Model
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            $model->event_id = $quest->event_id;
+            $model->event_id = $parent->id;
             $model->participant_id = $request->user()->userable->id;
             $model->mode = $quest->mode;
             $model->answer = $request->answer;
