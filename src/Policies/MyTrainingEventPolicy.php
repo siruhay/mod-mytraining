@@ -33,7 +33,9 @@ class MyTrainingEventPolicy
      */
     public function show(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
     {
-        return $user->hasPermission('show-mytraining-event', 'show-mytraining-history');
+        return
+            $myTrainingEvent->participants()->firstWhere('particiable_id', $user->userable->id) &&
+            $user->hasPermission('show-mytraining-event', 'show-mytraining-history');
     }
 
     /**
