@@ -41,7 +41,7 @@ class MyTrainingMemberPretestController extends Controller
      */
     public function update(Request $request, MyTrainingEvent $myTrainingEvent, MyTrainingPretest $myTrainingPretest)
     {
-        Gate::authorize('update', $myTrainingPretest);
+        Gate::authorize('update', $myTrainingPretest, $myTrainingEvent);
 
         $request->validate([
             'answer' => 'required'

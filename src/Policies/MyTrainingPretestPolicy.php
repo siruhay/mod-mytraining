@@ -2,9 +2,10 @@
 
 namespace Module\MyTraining\Policies;
 
-use Module\System\Models\SystemUser;
-use Module\MyTraining\Models\MyTrainingPretest;
 use Illuminate\Auth\Access\Response;
+use Module\System\Models\SystemUser;
+use Module\MyTraining\Models\MyTrainingEvent;
+use Module\MyTraining\Models\MyTrainingPretest;
 
 class MyTrainingPretestPolicy
 {
@@ -47,16 +48,16 @@ class MyTrainingPretestPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(SystemUser $user, MyTrainingPretest $myTrainingPretest): bool
+    public function update(SystemUser $user, MyTrainingPretest $myTrainingPretest, MyTrainingEvent $myTrainingEvent): bool
     {
-        $isParticipant = $myTrainingPretest
-            ->event
+        $isParticipant = $myTrainingEvent
             ->participants()
             ->where('particiable_id', $user->userable->id)->count() > 0;
 
         return
             $isParticipant &&
             $myTrainingPretest->mode === 'PRETEST' &&
+            $myTrainingPretest->event_id === $myTrainingEvent->id &&
             $user->hasLicenseAs('mytraining-member') &&
             $user->hasPermission('update-mytraining-pretest');
     }
