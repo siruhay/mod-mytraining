@@ -26,11 +26,11 @@ class MyTrainingQuestionPolicy
      */
     public function view(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
     {
-        $isCommittee = $myTrainingEvent
-            ->committees()
+        $isSpeaker = $myTrainingEvent
+            ->speakers()
             ->where('biodata_id', $user->userable->biodata_id)->count() > 0;
 
-        return $isCommittee && $user->hasAnyPermission('view-mytraining-pretest', 'view-mytraining-postest', 'view-mytraining-history-pretest', 'view-mytraining-history-postest');
+        return $isSpeaker && $user->hasAnyPermission('view-mytraining-pretest', 'view-mytraining-postest', 'view-mytraining-history-pretest', 'view-mytraining-history-postest');
     }
 
     /**
@@ -38,12 +38,12 @@ class MyTrainingQuestionPolicy
      */
     public function show(SystemUser $user, MyTrainingQuestion $myTrainingQuestion, MyTrainingEvent $myTrainingEvent): bool
     {
-        $isCommittee = $myTrainingEvent
-            ->committees()
+        $isSpeaker = $myTrainingEvent
+            ->speakers()
             ->where('biodata_id', $user->userable->biodata_id)->count() > 0;
 
         return
-            $isCommittee &&
+            $isSpeaker &&
             $user->hasAnyPermission('show-mytraining-pretest', 'show-mytraining-postest', 'show-mytraining-history-pretest', 'show-mytraining-history-postest');
     }
 
@@ -52,12 +52,12 @@ class MyTrainingQuestionPolicy
      */
     public function create(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
     {
-        $isCommittee = $myTrainingEvent
-            ->committees()
+        $isSpeaker = $myTrainingEvent
+            ->speakers()
             ->where('biodata_id', $user->userable->biodata_id)->count() > 0;
 
         return
-            $isCommittee &&
+            $isSpeaker &&
             $user->hasLicenseAs('mytraining-speaker') &&
             $user->hasAnyPermission('create-mytraining-pretest', 'create-mytraining-postest', 'create-mytraining-history-pretest', 'create-mytraining-history-postest');
     }
@@ -67,12 +67,12 @@ class MyTrainingQuestionPolicy
      */
     public function update(SystemUser $user, MyTrainingQuestion $myTrainingQuestion, MyTrainingEvent $myTrainingEvent): bool
     {
-        $isCommittee = $myTrainingEvent
-            ->committees()
+        $isSpeaker = $myTrainingEvent
+            ->speakers()
             ->where('biodata_id', $user->userable->biodata_id)->count() > 0;
 
         return
-            $isCommittee &&
+            $isSpeaker &&
             $user->hasLicenseAs('mytraining-speaker') &&
             $user->hasAnyPermission('update-mytraining-pretest', 'update-mytraining-postest', 'update-mytraining-history-pretest', 'update-mytraining-history-postest');
     }
@@ -82,12 +82,12 @@ class MyTrainingQuestionPolicy
      */
     public function delete(SystemUser $user, MyTrainingQuestion $myTrainingQuestion, MyTrainingEvent $myTrainingEvent): bool
     {
-        $isCommittee = $myTrainingEvent
-            ->committees()
+        $isSpeaker = $myTrainingEvent
+            ->speakers()
             ->where('biodata_id', $user->userable->biodata_id)->count() > 0;
 
         return
-            $isCommittee &&
+            $isSpeaker &&
             $user->hasLicenseAs('mytraining-speaker') &&
             $user->hasAnyPermission('delete-mytraining-pretest', 'delete-mytraining-postest', 'delete-mytraining-history-pretest', 'delete-mytraining-history-postest');
     }

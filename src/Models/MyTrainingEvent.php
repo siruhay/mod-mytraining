@@ -201,6 +201,16 @@ class MyTrainingEvent extends Model
     }
 
     /**
+     * speakers function
+     *
+     * @return HasMany
+     */
+    public function speakers(): HasMany
+    {
+        return $this->hasMany(TrainingCommittee::class, 'event_id')->where('type', 'SPEAKER');
+    }
+
+    /**
      * participants function
      *
      * @return HasMany

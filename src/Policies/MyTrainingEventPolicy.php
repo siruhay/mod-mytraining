@@ -33,6 +33,12 @@ class MyTrainingEventPolicy
      */
     public function show(SystemUser $user, MyTrainingEvent $myTrainingEvent): bool
     {
+        if ($user->hasLicenseAs('mytraining-speaker')) {
+            return
+                $myTrainingEvent->speakers()->firstWhere('biodata_id', $user->userable->biodata_id) &&
+                $user->hasPermission('show-mytraining-event', 'show-mytraining-history');
+        }
+
         return
             $myTrainingEvent->participants()->firstWhere('particiable_id', $user->userable->id) &&
             $user->hasPermission('show-mytraining-event', 'show-mytraining-history');
