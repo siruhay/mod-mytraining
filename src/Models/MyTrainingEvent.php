@@ -274,8 +274,8 @@ class MyTrainingEvent extends Model
         if ($user->hasLicenseAs('mytraining-speaker')) {
             return $query
                 ->whereIn('status', ['ASSIGNED', 'PUBLISHED', 'CERTIFICATE'])
-                ->whereHas('rundowns', function ($subquery) use ($user) {
-                    $subquery->where('speaker_id', $user->userable->id);
+                ->whereHas('committees', function ($subquery) use ($user) {
+                    $subquery->where('biodata_id', $user->userable->biodata_id);
                 });
         }
 
